@@ -30,4 +30,38 @@ class Game {
         this.ready = true;
     };
 
+    // branches code, depending on which key player presses
+    handleKeydown(e) {
+        if (this.ready) {
+            if (e.key === 'ArrowLeft') {
+                //move left
+                this.activePlayer.activeToken.moveLeft();
+            } else if (e.key === 'ArrowRight') {
+                //move right
+                this.activePlayer.activeToken.moveRight(this.board.columns);
+            } else if (e.key === 'ArrowDown') {
+                //play token
+                this.playToken();
+            }
+        }
+
+    }
+
+    playToken() {
+        let spaces = this.board.spaces;
+        let activeToken = this.activePlayer.activeToken;
+        let targetColumn = spaces[activeToken.columnLocation];
+        let targetSpace = null;
+
+        for (let space of targetColumn) {
+            if (space.token === null) {
+                targetSpace = space;
+            }
+        }
+
+        if (targetSpace !== null) {
+            game.ready = false;
+            activeToken.drop(targetSpace);
+        }
+    }
 }

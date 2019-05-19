@@ -61,7 +61,9 @@ class Game {
 
             if (targetSpace !== null) {
                 game.ready = false;
-                activeToken.drop(targetSpace);
+                activeToken.drop(targetSpace, function() {
+                    game.updateGameState(activeToken, targetSpace);
+                });
             }
         }
         /** 
@@ -134,8 +136,26 @@ class Game {
 
     //displays game over message
     gameOver(message) {
-        document.findElementById('game-over').style.display = "block";
-        document.findElementById('game-over').textContent = message;
+            document.findElementById('game-over').style.display = "block";
+            document.findElementById('game-over').textContent = message;
+
+        }
+        // updates game state after each player takes a turn
+    updateGameState(token, target) {
+        target.mark(token);
+
+        if (!this.checkForWin(target)) {
+            this.switchPlayers();
+
+            if (this.activePlayer.checkTokens()) {
+                this.activePlayer.activeToken.drawHTMLToken();
+                this.ready = true;
+            } else {
+                this.gameOver('No More Tokens');
+            }
+        } else {
+            this.gameOver(`${target.owner.name} wins!`);
+        }
 
     }
 

@@ -22,4 +22,9 @@ class Space {
         document.getElementById("mask").appendChild(svgSpace);
 
     }
+
+    // updates space to reflect token has been dropped into it
+    mark(token) {
+        this.token = token;
+    }
 }
